@@ -1,10 +1,28 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useAuth } from "../auth/AuthContext.jsx";
 import "../styles/pages/Login.css";
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+    const result = login(username, password);
+    if (result.success) {
+      navigate("/");
+    } else {
+      setError(result.error);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -19,7 +37,6 @@ const Login = () => {
               gợi ý cá nhân hóa.
             </p>
 
-            {/* Ảnh thật thay thế placeholder */}
             <div className="lg-image">
               <img
                 src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80"
@@ -29,16 +46,18 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Cột phải: Form đăng nhập (cao hơn) */}
+          {/* Cột phải: Form đăng nhập */}
           <div className="lg-form">
             <div className="lg-card">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="lg-input-group">
                   <label>Tên đăng nhập</label>
                   <input
                     type="text"
                     placeholder="your_username"
-                    defaultValue=""
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
                   />
                 </div>
 
@@ -47,9 +66,13 @@ const Login = () => {
                   <input
                     type="password"
                     placeholder="••••••••"
-                    defaultValue=""
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                 </div>
+
+                {error && <p className="lg-error">{error}</p>}
 
                 <div className="lg-form-options">
                   <label className="lg-checkbox-label">

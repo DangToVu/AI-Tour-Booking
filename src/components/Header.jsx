@@ -1,8 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext.jsx";
 import "../styles/components/Header.css";
 
 const Header = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  const getDashboardPath = () => {
+    if (!user) return null;
+    return `/${user.role}`;
+  };
+
   return (
     <header className="hd-header">
       <div className="hd-container">
@@ -22,6 +36,11 @@ const Header = () => {
           <Link to="/tours" className="hd-nav-link">
             Tours
           </Link>
+          {user && (
+            <Link to={getDashboardPath()} className="hd-nav-link">
+              Dashboard
+            </Link>
+          )}
         </nav>
 
         {/* Search Bar */}
@@ -48,23 +67,34 @@ const Header = () => {
 
         {/* Right Actions */}
         <div className="hd-actions">
-          <Link to="/login" className="hd-login-link">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-            Đăng nhập
-          </Link>
-          <Link to="/register" className="hd-btn-register">
-            Đăng ký
-          </Link>
+          {user ? (
+            <>
+              <span className="hd-username">Xin chào, {user.username}</span>
+              <button onClick={handleLogout} className="hd-btn-logout">
+                Đăng xuất
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="hd-login-link">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                Đăng nhập
+              </Link>
+              <Link to="/register" className="hd-btn-register">
+                Đăng ký
+              </Link>
+            </>
+          )}
           <Link to="/cart" className="hd-cart-icon">
             <svg
               width="22"
