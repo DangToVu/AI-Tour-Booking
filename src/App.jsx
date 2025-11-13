@@ -9,6 +9,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import PartnerDashboard from "./pages/PartnerDashboard";
 import Cart from "./pages/Cart";
+import ContactInfo from "./pages/ContactInfo";
+import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -22,7 +24,9 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/customer" element={<CustomerDashboard />} />
           <Route path="/partner" element={<PartnerDashboard />} />
-          <Route path="/cart" element={<Cart />} /> {/* ĐÃ THÊM */}
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout/contact" element={<ContactInfo />} />{" "}
+          <Route path="/checkout" element={<Checkout />} /> {/* BƯỚC 2 */}
         </Routes>
       </Router>
     </AuthProvider>
